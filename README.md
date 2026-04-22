@@ -77,3 +77,6 @@ cat >> README.md << 'EOF'
 ## Security Status
 
 ![Security Gate](https://github.com//bro-vault-test/actions/workflows/security.yml/badge.svg)
+
+ 
+donate please bc1qtvxzxt2pq20xd27pyarjhwv2ve8pl93e06qjy4
