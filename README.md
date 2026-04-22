@@ -72,7 +72,7 @@ cat >> README.md << 'EOF'
 
 ## Security Status
 
-![Security Gate](https://github.com/Cory_Hodson/bro-vault-test/actions/workflows/security.yml/badge.svg)
+![Security Gate](https://github.com/coryscotthodson-png/bro-vault-test/actions/workflows/security.yml/badge.svg)
 
 ## Security Status
 
