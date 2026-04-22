@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 contract MockNFT is ERC721 {
     uint256 public nextId;
     constructor() ERC721("MockNFT", "MNFT") {}
+
     function mint(address to) external returns (uint256) {
         _mint(to, ++nextId);
         return nextId;
@@ -18,7 +19,9 @@ contract VulnerableBROVault is IERC721Receiver {
     uint256 public constant RATE = 1_000_000;
     address private _currentCaller;
 
-    constructor(address _nft) { nft = MockNFT(_nft); }
+    constructor(address _nft) {
+        nft = MockNFT(_nft);
+    }
 
     function mint(uint256 tokenId) external {
         _currentCaller = msg.sender;
@@ -27,12 +30,11 @@ contract VulnerableBROVault is IERC721Receiver {
         _currentCaller = address(0);
     }
 
-    function onERC721Received(address, address, uint256, bytes calldata)
-        external override returns (bytes4)
-    {
+    function onERC721Received(address, address, uint256, bytes calldata) external override returns (bytes4) {
         if (_currentCaller != address(0)) {
             // forward callback — ignore return value intentionally
-            (bool _success,) = _currentCaller.call(abi.encodeWithSignature("reentryHook()")); _success;
+            (bool _success,) = _currentCaller.call(abi.encodeWithSignature("reentryHook()"));
+            _success;
         }
         return IERC721Receiver.onERC721Received.selector;
     }

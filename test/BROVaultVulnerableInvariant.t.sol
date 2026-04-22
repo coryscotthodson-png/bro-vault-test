@@ -14,7 +14,7 @@ contract MaliciousHandler is Test {
     uint256 private _loops;
 
     constructor(MockNFT _nft, VulnerableBROVault _vault) {
-        nft   = _nft;
+        nft = _nft;
         vault = _vault;
     }
 
@@ -29,7 +29,7 @@ contract MaliciousHandler is Test {
         nft.approve(address(vault), id);
 
         topLevelAttacks++;
-        vault.mint(id);   // ← triggers onERC721Received → reentryHook() cascade
+        vault.mint(id); // ← triggers onERC721Received → reentryHook() cascade
 
         uint256 afterBalance = vault.broBalance(address(this));
         if (afterBalance > before) {
@@ -43,7 +43,7 @@ contract MaliciousHandler is Test {
             _loops--;
             uint256 id = nft.mint(address(this));
             nft.approve(address(vault), id);
-            vault.mint(id);   // re-enters BEFORE broBalance was updated
+            vault.mint(id); // re-enters BEFORE broBalance was updated
         }
     }
 
@@ -62,29 +62,21 @@ contract BROVaultVulnerableInvariantTest is StdInvariant, Test {
     MaliciousHandler handler;
 
     function setUp() public {
-        nft     = new MockNFT();
-        vault   = new VulnerableBROVault(address(nft));
+        nft = new MockNFT();
+        vault = new VulnerableBROVault(address(nft));
         handler = new MaliciousHandler(nft, vault);
         targetContract(address(handler));
     }
 
     // This SHOULD fail — proving inflation happens
     function invariant_noReentrancyInflation() public view {
-        assertEq(
-            handler.actualCredits(),
-            handler.expectedLegitCredits(),
-            "vulnerable vault inflated credits"
-        );
+        assertEq(handler.actualCredits(), handler.expectedLegitCredits(), "vulnerable vault inflated credits");
     }
 
     // Observed inflation should grow beyond zero after attacks
     function invariant_inflationIsTracked() public view {
         if (handler.topLevelAttacks() > 0) {
-            assertGe(
-                handler.totalInflationObserved(),
-                0,
-                "inflation counter should be non-negative"
-            );
+            assertGe(handler.totalInflationObserved(), 0, "inflation counter should be non-negative");
         }
     }
 }
