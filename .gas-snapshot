@@ -1,0 +1,4 @@
+BROVaultTest:test_FixedBlocksReentry() (gas: 272842)
+BROVaultTest:test_VulnDoubleMint() (gas: 654577)
+CounterTest:testFuzz_SetNumber(uint256) (runs: 1000, μ: 27121, ~: 28435)
+CounterTest:test_Increment() (gas: 28448)

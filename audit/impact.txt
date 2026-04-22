@@ -1,0 +1,6 @@
+Impact:
+
+- Token balances can be inflated without proportional minting
+- Accounting integrity is broken
+- Rewards or collateral systems would be exploitable
+- Severity increases in real financial deployments

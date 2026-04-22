@@ -1,0 +1,5 @@
+Root Cause:
+The vault performs external interactions during minting,
+allowing reentrancy into mint() before state updates are finalized.
+
+This leads to duplicated balance updates and inflation.

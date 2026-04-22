@@ -1,0 +1,78 @@
+name: Security Gate
+
+on:
+  push:
+    branches: ["main", "master", "dev"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  # ── Job 1: Unit + Fixed Vault Invariant (must pass, blocks merge) ──
+  security-pass:
+    name: Fixed Vault Security Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Compile contracts
+        run: forge build --sizes
+
+      - name: Unit tests (exploit + fix)
+        run: forge test --match-contract BROVaultTest -vv
+
+      - name: Fixed vault invariant (128k calls)
+        run: forge test --match-contract BROVaultInvariantTest -vv
+
+      - name: Differential invariant (256k calls)
+        run: forge test --match-contract BROVaultDualInvariantTest -vv
+
+  # ── Job 2: Exploit witness (expected to FAIL, documents the bug) ──
+  exploit-witness:
+    name: Vulnerable Vault Exploit Witness
+    runs-on: ubuntu-latest
+    continue-on-error: true        # does NOT block merge — failure is expected
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Clear invariant failure cache
+        run: rm -rf cache/invariant/failures/
+
+      - name: Exploit invariant (should fail — proves reentrancy exists)
+        run: |
+          forge test --match-contract BROVaultVulnerableInvariantTest -vv \
+            || echo "::warning::Exploit confirmed - vulnerable vault inflated credits as expected"
+
+  # ── Job 3: Code quality checks ──
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Check formatting
+        run: forge fmt --check
+
+      - name: Gas snapshot
+        run: forge snapshot --check --tolerance 5
+        continue-on-error: true    # warn on gas regressions, don't block

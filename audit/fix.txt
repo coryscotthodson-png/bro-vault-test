@@ -1,0 +1,5 @@
+Mitigation:
+
+1. Apply reentrancy guard (nonReentrant modifier)
+2. Follow CEI pattern (Checks → Effects → Interactions)
+3. Avoid external calls during mint execution

@@ -1,0 +1,69 @@
+No files changed, compilation skipped
+Warning: Replayed invariant failure from "/root/bro-vault-test/cache/invariant/failures/BROVaultVulnerableInvariantTest/invariant_noReentrancyInflation" file. 
+Run `forge clean` or remove file to ignore failure and to continue invariant test campaign.
+
+Ran 1 test for test/BROVaultInvariant.t.sol:BROVaultInvariantTest
+[PASS] test_basic() (gas: 208)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 9.17ms (209.00µs CPU time)
+
+Ran 2 tests for test/BROVault.t.sol:BROVaultTest
+[PASS] test_FixedBlocksReentry() (gas: 272842)
+Logs:
+  Fixed vault : 1000000
+
+[PASS] test_VulnDoubleMint() (gas: 654577)
+Logs:
+  Attacker BRO: 6000000
+  Legitimate  : 1000000
+  Inflation x : 6
+
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 15.54ms (5.22ms CPU time)
+
+Ran 2 tests for test/BROVaultVulnerableInvariant.t.sol:BROVaultVulnerableInvariantTest
+[PASS] invariant_inflationIsTracked() (runs: 256, calls: 128000, reverts: 0)
+
+╭------------------+-------------+-------+---------+----------╮
+| Contract         | Selector    | Calls | Reverts | Discards |
++=============================================================+
+| MaliciousHandler | attackOnce  | 64115 | 0       | 0        |
+|------------------+-------------+-------+---------+----------|
+| MaliciousHandler | reentryHook | 63885 | 0       | 0        |
+╰------------------+-------------+-------+---------+----------╯
+
+[FAIL: invariant_noReentrancyInflation replay failure]
+	[Sequence] (original: 1, shrunk: 1)
+		sender=0x00000000000000000000000000000000000008D4 addr=[test/BROVaultVulnerableInvariant.t.sol:MaliciousHandler]0xF62849F9A0B5Bf2913b396098F7c7019b51A820a calldata=attackOnce(uint256) args=[10084778 [1.008e7]]
+ invariant_noReentrancyInflation() (runs: 1, calls: 1, reverts: 1)
+Suite result: FAILED. 1 passed; 1 failed; 0 skipped; finished in 76.72s (76.96s CPU time)
+
+Ran 2 tests for test/BROVaultDualInvariant.t.sol:BROVaultDualInvariantTest
+[PASS] invariant_fixedMatchesExpected() (runs: 256, calls: 128000, reverts: 0)
+
+╭-------------+----------+--------+---------+----------╮
+| Contract    | Selector | Calls  | Reverts | Discards |
++======================================================+
+| DualHandler | mintBoth | 128000 | 0       | 0        |
+╰-------------+----------+--------+---------+----------╯
+
+[PASS] invariant_vulnerableNotLessThanFixed() (runs: 256, calls: 128000, reverts: 0)
+
+╭-------------+----------+--------+---------+----------╮
+| Contract    | Selector | Calls  | Reverts | Discards |
++======================================================+
+| DualHandler | mintBoth | 128000 | 0       | 0        |
+╰-------------+----------+--------+---------+----------╯
+
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 100.90s (194.28s CPU time)
+
+Ran 4 test suites in 100.97s (177.65s CPU time): 6 tests passed, 1 failed, 0 skipped (7 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/BROVaultVulnerableInvariant.t.sol:BROVaultVulnerableInvariantTest
+[FAIL: invariant_noReentrancyInflation replay failure]
+	[Sequence] (original: 1, shrunk: 1)
+		sender=0x00000000000000000000000000000000000008D4 addr=[test/BROVaultVulnerableInvariant.t.sol:MaliciousHandler]0xF62849F9A0B5Bf2913b396098F7c7019b51A820a calldata=attackOnce(uint256) args=[10084778 [1.008e7]]
+ invariant_noReentrancyInflation() (runs: 1, calls: 1, reverts: 1)
+
+Encountered a total of 1 failing tests, 6 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
