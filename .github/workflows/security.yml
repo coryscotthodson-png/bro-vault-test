@@ -1,5 +1,8 @@
 name: Security Gate
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: ["main", "master", "dev"]
@@ -12,7 +15,7 @@ jobs:
     name: Fixed Vault Security Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
 
@@ -39,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true        # does NOT block merge — failure is expected
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
 
@@ -61,7 +64,7 @@ jobs:
     name: Code Quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
 
