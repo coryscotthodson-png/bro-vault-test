@@ -64,3 +64,16 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+
+## Security Status
+
+![Security Gate](https://github.com/YOUR_USERNAME/bro-vault-test/actions/workflows/security.yml/badge.svg)
+cat >> README.md << 'EOF'
+
+## Security Status
+
+![Security Gate](https://github.com/Cory_Hodson/bro-vault-test/actions/workflows/security.yml/badge.svg)
+
+## Security Status
+
+![Security Gate](https://github.com//bro-vault-test/actions/workflows/security.yml/badge.svg)
